@@ -1,0 +1,158 @@
+// Vue Router setup
+const routes = [
+  { path: "/", component: Home },
+  { path: "/account", component: accounts },
+  { path: "/login", component: login },
+  { path: "/lessons", component: Lessons, props: true },
+  { path: "/basket", component: Basket, props: true },
+  { path: "/checkout", component: Checkout, props: true },
+];
+
+const router = new VueRouter({
+  routes,
+});
+new Vue({
+  el: "#app",
+  router,
+  data: {
+    checkout: "",
+    login: "",
+    accounts: "",
+    sitename: "Learnify",
+    lessons: [
+      {
+        id: 1,
+        subject: "Math",
+        location: "London",
+        price: 300,
+        spaces: 3,
+        cartCounter: 0,
+        image: "images/math.png",
+        Genre: "Core",
+      },
+      {
+        id: 2,
+        subject: "English",
+        location: "London",
+        price: 300,
+        spaces: 5,
+        cartCounter: 0,
+        image: "images/english.png",
+        Genre: "Core",
+      },
+      {
+        id: 3,
+        subject: "Science",
+        location: "Oxford",
+        price: 350,
+        spaces: 4,
+        cartCounter: 0,
+        image: "images/albert.png",
+        Genre: "Core",
+      },
+      {
+        id: 4,
+        subject: "Dance",
+        location: "Manchester",
+        price: 165,
+        spaces: 7,
+        cartCounter: 0,
+        image: "images/dance.png",
+      },
+      {
+        id: 5,
+        subject: "History",
+        location: "London",
+        price: 400,
+        spaces: 5,
+        cartCounter: 0,
+        image: "images/history.png",
+        Genre: "Arts",
+      },
+      {
+        id: 6,
+        subject: "Drama",
+        location: "London",
+        price: 350,
+        spaces: 3,
+        cartCounter: 0,
+        image: "images/drama.png",
+        Genre: "Arts",
+      },
+      {
+        id: 7,
+        subject: "Art",
+        location: "Brighton",
+        price: 350,
+        spaces: 5,
+        cartCounter: 0,
+        image: "images/bob.png",
+        Genre: "Arts",
+      },
+      {
+        id: 8,
+        subject: "Philosophy",
+        location: "Cambridge",
+        price: 500,
+        spaces: 4,
+        cartCounter: 0,
+        image: "images/phil.png",
+        Genre: "Optional",
+      },
+      {
+        id: 9,
+        subject: "Geometry",
+        location: "Cambridge",
+        price: 750,
+        spaces: 4,
+        cartCounter: 0,
+        image: "images/geometry.png",
+        Genre: "Optional",
+      },
+      {
+        id: 10,
+        subject: "P.E",
+        location: "Brighton",
+        price: 350,
+        spaces: 8,
+        cartCounter: 0,
+        image: "/images/david.png",
+        Genre: "Sports",
+      },
+      {
+        id: 11,
+        subject: "Football",
+        location: "Manchester",
+        price: 850,
+        spaces: 6,
+        cartCounter: 0,
+        image: "/images/pep.png",
+        Genre: "Sports",
+      },
+      {
+        id: 12,
+        subject: "Golf",
+        location: "Wales",
+        price: 1250,
+        spaces: 2,
+        cartCounter: 0,
+        image: "images/golf.png",
+        Genre: "Sports",
+      },
+    ],
+  },
+  computed: {
+    totalCartCount() {
+      return this.lessons.reduce(
+        (total, lesson) => total + lesson.cartCounter,
+        0
+      );
+    },
+  },
+  methods: {
+    updateCartCount() {
+      // Triggers recalculation of the total cart count
+    },
+    updateSpaces() {},
+  },
+});

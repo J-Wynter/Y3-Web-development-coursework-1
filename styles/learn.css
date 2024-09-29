@@ -1,0 +1,18 @@
+ body{
+    white-space: nowrap;
+    /* background-image: url(../images/booked.png); */
+} 
+.drop1{padding: 5pxs;
+    width: 150px;
+    
+}
+.h1{display: block;
+width: 100%;}
+
+.dropdown-container{
+    display:grid; 
+    gap: 10px;
+}
+.row {
+    margin-top: 20px; /* Adds space between the dropdowns and lessons grid */
+  }
