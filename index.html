@@ -103,20 +103,22 @@
         <form>
             <div class="mb-3">
             <h2>Creat An Account</h2>
-            <label for="exampleInputPassword1" class="form-label">Phone:</label>
+            <label for="exampleInputEmail1" class="form-label">Email address:</label>
+                <input type="email" class="form-control" id="accountEmail" placeholder="Enter Email" value="">
 
-                 <input class="form-control" style="width:30%;" id="phone" type="tel" minlength="11" maxlength="11" value=""
+            <label for="inputPhone" class="form-label">Phone:</label>
+                 <input class="form-control" style="width:30%;" id="accountPhone" type="tel" minlength="11" maxlength="11" value=""
                 placeholder="Register Phone number" />
             </div>
             <div class="mb-3">
                 <label for="exampleInputPassword1" class="form-label">Password:</label>
-                <input class="form-control" style="width:30%;" id="password" type="password" placeholder="Enter Password" value="" />
+                <input class="form-control"  id="accountPassword" type="password" placeholder="Enter Password" value="" />
             </div>
             <div class="mb-3 form-check">
-                <input type="checkbox" class="form-check-input" id="exampleCheck1">
+                <input type="checkbox" class="form-check-input" id="terms">
                 <label class="form-check-label" for="exampleCheck1">I Agree to terms and conditions</label>
             </div>
-            <button type="submit" class="btn btn-primary">Submit</button>
+            <button type="submit" class="btn btn-primary">Create account</button>
         </form>
         `,
       };
@@ -127,19 +129,19 @@
         <form>
             <div class="mb-3">
                 <h2>Login</h2>
-                <label for="exampleInputEmail1" class="form-label">Email address</label>
-                <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
-                <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
-            </div>
+                <label for="inputPhone" class="form-label">Phone:</label>
+                 <input class="form-control" style="width:30%;" id="accountPhone" type="tel" minlength="11" maxlength="11" value=""
+                placeholder="Enter Phone number" />
+
             <div class="mb-3">
-                <label for="exampleInputPassword1" class="form-label">Password</label>
-                <input type="password" class="form-control" id="exampleInputPassword1">
+                <label for="exampleInputPassword1" class="form-label">Password:</label>
+                <input type="password" class="form-control" id="loginPassword" placeholder="Enter Password" value="">
             </div>
             <div class="mb-3 form-check">
                 <input type="checkbox" class="form-check-input" id="exampleCheck1">
-                <label class="form-check-label" for="exampleCheck1">Check me out</label>
+                <label class="form-check-label" style="width:30%;" for="exampleCheck1">Stay signed in</label>
             </div>
-            <button type="submit" class="btn btn-primary">Submit</button>
+            <button type="submit" class="btn btn-primary">Login</button>
         </form>
         `,
       };
