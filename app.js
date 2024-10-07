@@ -15,6 +15,8 @@ new Vue({
   el: "#app",
   router,
   data: {
+    user:"",
+    Customers:[],
     checkout: "",
     login: "",
     accounts: "",

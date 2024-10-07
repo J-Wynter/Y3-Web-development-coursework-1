@@ -99,10 +99,24 @@
       };
 
       const accounts = {
+        data(){
+          return {
+            accountEmail: "",
+            accountPhone:null,
+            Customers:[{
+              name:"",
+              phone:""
+
+            }]
+          }
+        },
         template: `
         <form>
             <div class="mb-3">
             <h2>Creat An Account</h2>
+             <label for="accountName" class="form-label">Name:</label>
+                <input type="text" class="form-control" id="accountName" placeholder="Enter Name" value="">
+
             <label for="exampleInputEmail1" class="form-label">Email address:</label>
                 <input type="email" class="form-control" id="accountEmail" placeholder="Enter Email" value="">
 
@@ -121,6 +135,21 @@
             <button type="submit" class="btn btn-primary">Create account</button>
         </form>
         `,
+        methods:{
+          store(){
+            let user = {
+              name: this.accountName ,
+              name: this.accountPhone,
+              email: this.accountEmail,
+              password: this.accountPassword,
+
+            }
+            this.Customers.push(user)
+            this.user.accountName = null
+            this.user.accountPhone = null
+
+          }
+        }
       };
 
       const login = {
@@ -153,7 +182,8 @@ const Lessons = {
     return {
       selectedSubject: "",  // To store the selected genre
       sortByPrice: "" ,    // To store the selected price order
-      sortByLocation:""
+      sortByLocation:"",
+      sortBySpace:"",
     };
   },
   template: `
@@ -178,6 +208,17 @@ const Lessons = {
           <option value="">Default</option>
           <option value="asc">Price: Low to High</option>
           <option value="desc">Price: High to Low</option>
+        </select>
+      </div>
+
+            <!-- Sort by spaces -->
+
+        <div class="mb-3 drop1">
+        <label for="spaces" class="form-label">Sort by Availibility</label>
+        <select v-model="sortBySpace" id="spaces" class="form-select">
+          <option value="">Default</option>
+          <option value="asc">Availibility: Low to High</option>
+          <option value="desc">Availibility: High to Low</option>
         </select>
       </div>
 
@@ -238,6 +279,12 @@ const Lessons = {
     } else if (this.sortByPrice === "desc") {
       filteredLessons.sort((a, b) => b.price - a.price);
     }
+    // sort by spaces
+    if (this.sortBySpace === "asc") {
+      filteredLessons.sort((a, b) => a.spaces - b.spaces);
+    } else if (this.sortBySpace === "desc") {
+      filteredLessons.sort((a, b) => b.spaces - a.spaces);
+    }
 
     // Filter by location
     if (this.sortByLocation !== "") {
@@ -263,6 +310,15 @@ methods: {
       // Basket Component
       const Basket = {
         props: ["lessons"],
+        data(){
+          return {
+            checkoutName: null,
+            checkoutPhone: null,
+            Customers:[{
+            
+            }]
+          }
+        },
         template: `
           <div>
             <h2>Your Basket</h2>
@@ -278,6 +334,21 @@ methods: {
               <div class="mt-4">
                 <strong>Total: £{{ totalCost }}</strong>
               </div>
+              <div class="mb-3">
+                <label for="checkoutName" class="form-label">Name:</label>
+                <input type="text" class="form-control" id="checkoutName" placeholder="Enter Name" v-model="checkoutName">
+            </div>
+              <div class="mb-3">
+                <label for="checkoutPhone" class="form-label">Phone:</label>
+                <input type="phone" class="form-control" id="checkoutPhone" placeholder="Enter Phone Number" v-model="checkoutPhone">
+                <button @click="store"></button>
+                <div>
+    <p>Details:</p>
+    
+      <p v-for="user in Customers">{{ user.name }}, {{ user.phone}}</p>
+    
+  </div>
+            </div>
               <router-link to="/Checkout">
               <button class="btn btn-success btn-sm" @click="checkout(lesson)">Checkout</button>
                 </router-link>
@@ -306,6 +377,18 @@ methods: {
               this.$emit("update-cart");
             }
           },
+          store(){
+            let user = {
+              name: this.checkoutName ,
+              phone: this.checkoutPhone,
+
+            }
+            this.Customers.push(user)
+            this.user.checkoutName = null
+            this.user.checkoutPhone = null
+
+          
+          }
         },
       };
 
@@ -314,8 +397,9 @@ methods: {
         template:`
         <div>
             <h2>Checkout</h2>
-            <p>This is where you enter your details and finalise your orders.</p>
+            <p>Your order has been finalised.</p>
           </div>
+        
         `,
         computed:{
            test(){ console.log("hello world");
