@@ -5,7 +5,6 @@ const routes = [
   { path: "/login", component: login },
   { path: "/lessons", component: Lessons, props: true },
   { path: "/basket", component: Basket, props: true },
-  { path: "/checkout", component: Checkout, props: true },
 ];
 
 const router = new VueRouter({
@@ -17,7 +16,6 @@ new Vue({
   data: {
     user:"",
     Customers:[],
-    checkout: "",
     login: "",
     accounts: "",
     sitename: "Learnify",
