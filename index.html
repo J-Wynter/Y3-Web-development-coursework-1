@@ -42,7 +42,10 @@
                 <router-link to="/login" class="nav-link"
                   >Login</router-link>
               </li>
+
           </ul>
+
+          
 
           <!-- Basket Icon with Total Count -->
           <div class="navbar-nav">
@@ -82,7 +85,6 @@
         :lessons="lessons"
         :accounts="accounts"
         :login="login"
-        :checkout="checkout"
         @update-cart="updateCartCount"
       ></router-view>
     </div>
@@ -191,6 +193,11 @@ const Lessons = {
   <!-- Dropdowns and Header -->
   <div class="header-container" style="display: flex; justify-content: space-between; align-items: center; padding: 20px;">
     <h1 class="drop1">Lessons</h1>
+     <input id="userSearchQuery" class="search" type="text" placeholder="Search..">
+        <!-- Adjusted the button to call searchUsers() on click -->
+        <button type="submit" class="searchButton" onclick="searchUsers()">
+            <i class="fa fa-search"></i>
+        </button>
     <div class="dropdown-container" style="display: flex; gap: 10px;">
       <!-- Filter by Subject -->
       <div class="mb-3 drop1">
@@ -341,17 +348,15 @@ methods: {
               <div class="mb-3">
                 <label for="checkoutPhone" class="form-label">Phone:</label>
                 <input type="phone" class="form-control" id="checkoutPhone" placeholder="Enter Phone Number" v-model="checkoutPhone">
-                <button @click="store"></button>
+                <button class="btn btn-success btn-sm" @click="Validate">Confirm</button>
                 <div>
     <p>Details:</p>
     
-      <p v-for="user in Customers">{{ user.name }}, {{ user.phone}}</p>
+      <p v-for="user in Customers">{{ user.name }} <br> {{ user.phone}}</p>
     
   </div>
             </div>
-              <router-link to="/Checkout">
-              <button class="btn btn-success btn-sm" @click="checkout(lesson)">Checkout</button>
-                </router-link>
+              <button id="checkoutBtn" class="btn btn-success btn-sm" :disabled="!isUser()" @click="Checkout">Checkout</button>
             </div>
             <div v-else>
               <p>Your basket is empty.</p>
@@ -367,7 +372,7 @@ methods: {
               (total, lesson) => total + lesson.price * lesson.cartCounter,
               0
             );
-          },
+          }
         },
         methods: {
           removeFromCart(lesson) {
@@ -383,33 +388,50 @@ methods: {
               phone: this.checkoutPhone,
 
             }
+            
             this.Customers.push(user)
-            this.user.checkoutName = null
-            this.user.checkoutPhone = null
-
+            console.log(user)
           
-          }
-        },
-      };
+          },
 
-      const Checkout = {
-        props: ["lessons"],
-        template:`
-        <div>
-            <h2>Checkout</h2>
-            <p>Your order has been finalised.</p>
-          </div>
-        
-        `,
-        computed:{
-           test(){ console.log("hello world");
-            return "some value";
-        }
+          validation(){
+            
+              let name = this.checkoutName
+              let phone = this.checkoutPhone
+              
+              // Regular expression for letters only (name validation)
+              let nameExp = /^[a-zA-Z\s]+$/;
+              
+              // Regular expression for numbers only (phone validation)
+              let phoneExp = /^[0-9]+$/;
+
+              if(!nameExp.test(name)){
+                alert("you must enter letters only")
+                return false;
+              }
+              if(!phoneExp.test(phone)){
+                alert("you must digits 0-9")
+                return false;
+              }
+              return true;
+              },
+             Validate(){
+                if (this.validation()){
+                  this.store();
+                }
+          
+              },
+              isUser(){
+                    return this.checkoutName && this.checkoutPhone;
+                    checkBtn = document.getElementById("checkoutBtn");
+                       },
+
+                       Checkout(){
+                          alert('Your order has been finalised');
+                       }
+                
             }
-      }
-
-    
-
+          }
  </script>
     <script src="app.js"></script>
   </body>
