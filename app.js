@@ -35,7 +35,7 @@ new Vue({
   methods: {
     async getLessons(){
       try{
-        response = await fetch('/M00874694/lessons');
+        response = await fetch('/lessons');
         const data = await response.json(); // Parse the JSON response
         this.lessons = data; // Store lessons in Vue's data
     } catch (error){

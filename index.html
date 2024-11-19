@@ -331,7 +331,7 @@
           },
           async searchLessons(query) {
             try {
-              const response = await fetch("/M00874694/searchLessons", {
+              const response = await fetch("/searchLessons", {
                 method: "POST",
                 headers: {
                   "Content-Type": "application/json",
@@ -491,7 +491,7 @@
 
           async updateSpaces(lessonIDs, spaces) {
             try {
-              const response = await fetch("M00874694/updateLessons", {
+              const response = await fetch("/lessons", {
                 method: "PUT",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ lessonIDs, spaces }),
