@@ -9,7 +9,10 @@
       crossorigin="anonymous"
     />
     <link rel="stylesheet" type="text/css" href="/styles/learn.css" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+    />
     <script src="https://unpkg.com/vue@2.7.8/dist/vue.js"></script>
     <script src="https://unpkg.com/vue-router@3.5.3/dist/vue-router.js"></script>
   </head>
@@ -195,10 +198,10 @@
      
     <div class="main-search-input fl-wrap">
       <div class="main-search-input-item">
-         <input type="text"  value="" placeholder="Search Lessons...">
-      </div>
+  <input type="text" @keyup.enter="searchLessons($event.target.value)" placeholder="Search Lessons...">
+</div>
                                
-     <button class="main-search-button"><i class="fa fa-search"></i></button>
+     <button class="main-search-button" @="searchLessons"><i class="fa fa-search"></i></button>
       </div>
        </div>
     
@@ -251,7 +254,7 @@
     <div class="row">
       <div v-for="(lesson, index) in filteredAndSortedLessons" :key="index" class="col-md-4 mb-4">
         <div class="card">
-          <img :src="lesson.image" class="card-img-top" alt="Lesson image">
+          <img :src="lesson.image" height="300" class="card-img-top" alt="Lesson image">
           <div class="card-body">
             <h5 class="card-title">{{ lesson.subject }}</h5>
             <p class="card-text"><strong>Location:</strong> {{ lesson.location }}</p>
@@ -326,6 +329,22 @@
               return; // Simply return if no spaces are available
             }
           },
+          async searchLessons(query) {
+            try {
+              const response = await fetch("/M00874694/searchLessons", {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ searchQuery: query }),
+              });
+              const data = await response.json();
+              console.log("Search results:", data); // Log the response
+              this.lessons = data; // Update lessons data with the search results
+            } catch (error) {
+              console.error("error searching for results:", error);
+            }
+          },
         },
       };
       // Basket Component
@@ -363,12 +382,12 @@
                 <button class="btn btn-success btn-sm" @click="Validate">Confirm</button>
                 <div>
     <p>Details:</p>
-    
+
       <p v-for="user in Customers">{{ user.name }} <br> {{ user.phone}}</p>
     
   </div>
             </div>
-              <button id="checkoutBtn" class="btn btn-success btn-sm" :disabled="!isUser()" @click="Checkout">Checkout</button>
+              <button id="checkoutBtn" class="btn btn-success btn-sm" :disabled="!isUser()" @click="placeOrder">Checkout</button>
             </div>
             <div v-else>
               <p>Your basket is empty.</p>
@@ -415,11 +434,11 @@
             let phoneExp = /^[0-9]+$/;
 
             if (!nameExp.test(name)) {
-              alert("you must enter letters only");
+              alert("Name: you must enter letters only");
               return false;
             }
             if (!phoneExp.test(phone)) {
-              alert("you must digits 0-9");
+              alert("Numbers: you must digits 0-9");
               return false;
             }
             return true;
@@ -433,9 +452,59 @@
             return this.checkoutName && this.checkoutPhone;
             checkBtn = document.getElementById("checkoutBtn");
           },
+          async placeOrder() {
+            const orderDetails = {
+              name: this.checkoutName, // Customer's name
+              phone: this.checkoutPhone, // Customer's phone
+              lessonIDs: this.cartItems.map((item) => item.id), // Array of lesson IDs from cart items
+              spaces: this.cartItems.reduce(
+                (total, item) => total + item.cartCounter,
+                0
+              ), // Total spaces
+            };
 
-          Checkout() {
-            alert("Your order has been finalised");
+            try {
+              const response = await fetch("/M00874694/orders", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(orderDetails),
+              });
+              const data = await response.json();
+
+              if (data.success) {
+                alert("Your order has been finalised");
+                await this.updateSpaces(
+                  orderDetails.lessonIDs,
+                  orderDetails.spaces
+                );
+
+                this.checkoutName = "";
+                this.checkoutPhone = "";
+              } else {
+                alert("Failed to place order: " + data.error);
+              }
+            } catch (error) {
+              console.error("Error placing order:", error);
+              alert("An error occurred while placing the order.");
+            }
+          },
+
+          async updateSpaces(lessonIDs, spaces) {
+            try {
+              const response = await fetch("M00874694/updateLessons", {
+                method: "PUT",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ lessonIDs, spaces }),
+              });
+              const data = await response.json();
+              if (data.success) {
+                console.log("space update successful", spaces, lessonIDs);
+              } else {
+                console.error("there was an error: ", data.error);
+              }
+            } catch (error) {
+              console.error("error updating spaces ", error);
+            }
           },
         },
       };
