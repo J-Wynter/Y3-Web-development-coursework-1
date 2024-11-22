@@ -22,6 +22,8 @@ new Vue({
     sitename: "Learnify",
     lessons: [],
     orders: [],
+    imageBaseURL: "https://y3-web-development-coursework-1-main.onrender.com",
+    serverBaseURL: "https://y3-web-development-coursework-1-main.onrender.com",
    },
   computed: {
     totalCartCount() {
