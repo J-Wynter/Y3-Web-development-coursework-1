@@ -37,7 +37,7 @@ new Vue({
   methods: {
     async getLessons(){
       try{
-        response = await fetch('/lessons');
+        response = await fetch(`${this.serverBaseURL}/lessons`);
         const data = await response.json(); // Parse the JSON response
         this.lessons = data; // Store lessons in Vue's data
     } catch (error){
