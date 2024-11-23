@@ -331,7 +331,7 @@
           },
           async searchLessons(query) {
             try {
-              const response = await fetch("/searchLessons", {
+              const response = await fetch(`${this.serverBaseURL}/searchLessons`, {
                 method: "POST",
                 headers: {
                   "Content-Type": "application/json",
