@@ -331,13 +331,16 @@
           },
           async searchLessons(query) {
             try {
-              const response = await fetch(`${this.serverBaseURL}/searchLessons`, {
-                method: "POST",
-                headers: {
-                  "Content-Type": "application/json",
-                },
-                body: JSON.stringify({ searchQuery: query }),
-              });
+              const response = await fetch(
+                `${this.serverBaseURL}/searchLessons`,
+                {
+                  method: "POST",
+                  headers: {
+                    "Content-Type": "application/json",
+                  },
+                  body: JSON.stringify({ searchQuery: query }),
+                }
+              );
               const data = await response.json();
               console.log("Search results:", data); // Log the response
               this.lessons = data; // Update lessons data with the search results

@@ -1,4 +1,3 @@
-
 // Vue Router setup
 const routes = [
   { path: "/", component: Home },
@@ -15,8 +14,8 @@ new Vue({
   el: "#app",
   router,
   data: {
-    user:"",
-    Customers:[],
+    user: "",
+    Customers: [],
     login: "",
     accounts: "",
     sitename: "Learnify",
@@ -24,7 +23,7 @@ new Vue({
     orders: [],
     imageBaseURL: "https://y3-web-development-coursework-1-main.onrender.com",
     serverBaseURL: "https://y3-web-development-coursework-1-main.onrender.com",
-   },
+  },
   computed: {
     totalCartCount() {
       return this.lessons.reduce(
@@ -35,24 +34,26 @@ new Vue({
   },
   // conouted function that stores lessons in database
   methods: {
-    async getLessons(){
-      try{
+    async getLessons() {
+      try {
         response = await fetch(`${this.serverBaseURL}/lessons`);
         const data = await response.json(); // Parse the JSON response
         this.lessons = data; // Store lessons in Vue's data
-    } catch (error){
-      console.log('error fetching lessons:', error);
-    }
+      } catch (error) {
+        console.log("error fetching lessons:", error);
+      }
     },
-    async  lessonValidation(lessons) {
+    async lessonValidation(lessons) {
       try {
         // Iterate over the lessons array
         for (const lesson of lessons) {
           // Check if a lesson with the same ID already exists
           const existingLesson = await collection.findOne({ id: lesson.id });
-    
+
           if (existingLesson) {
-            console.log(`Lesson with id ${lesson.id} already exists. Skipping insertion.`);
+            console.log(
+              `Lesson with id ${lesson.id} already exists. Skipping insertion.`
+            );
           } else {
             // Insert the lesson if it doesn't exist
             await collection.insertMany(lesson);
@@ -60,19 +61,19 @@ new Vue({
           }
         }
       } catch (err) {
-        console.error('Error inserting lessons:', err);
+        console.error("Error inserting lessons:", err);
       }
     },
-    
+
     updateCartCount() {
       // Triggers recalculation of the total cart count
     },
-    
+
     updateSpaces() {
       // Update lesson spaces logic here
     },
   },
   created() {
-    this.getLessons(); 
+    this.getLessons();
   },
 });
