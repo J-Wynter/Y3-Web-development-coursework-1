@@ -1,1 +1,517 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Learnify</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+      crossorigin="anonymous"
+    />
+    <link rel="stylesheet" type="text/css" href="styles/learn.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+    />
+    <script src="https://unpkg.com/vue@2.7.8/dist/vue.js"></script>
+    <script src="https://unpkg.com/vue-router@3.5.3/dist/vue-router.js"></script>
+  </head>
 
+  <body class="p-3 mb-2 bg-dark text-white">
+    <div id="app" class="container">
+      <header class="my-4">
+        <h1>{{ sitename }}</h1>
+      </header>
+
+      <nav class="navbar navbar-expand-lg bg-body-tertiary mb-4">
+        <div class="container-fluid">
+          <a class="navbar-brand" href="#"
+            ><img
+              src="images/Screenshot 2024-09-26 at 19.59.42.png"
+              style="width: 72px"
+              alt=""
+          /></a>
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+              <router-link to="/" class="nav-link">Home</router-link>
+            </li>
+            <li class="nav-item">
+              <router-link to="/lessons" class="nav-link">Lessons</router-link>
+            </li>
+            <li class="nav-item">
+              <router-link to="/account" class="nav-link"
+                >Create Account</router-link
+              >
+            </li>
+            <li class="nav-item">
+              <router-link to="/login" class="nav-link">Login</router-link>
+            </li>
+          </ul>
+
+          <!-- Basket Icon with Total Count -->
+          <div class="navbar-nav">
+            <a href="#" class="nav-link position-relative">
+              <li>
+                <button>
+                  <router-link to="/basket" class="nav-link">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="16"
+                      height="16"
+                      fill="currentColor"
+                      class="bi bi-basket-fill"
+                      viewBox="0 0 16 16"
+                    >
+                      <path
+                        d="M5.071 1.243a.5.5 0 0 1 .858.514L3.383 6h9.234L10.07 1.757a.5.5 0 1 1 .858-.514L13.783 6H15.5a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.5.5H15v5a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V9H.5a.5.5 0 0 1-.5-.5v-2A.5.5 0 0 1 .5 6h1.717zM3.5 10.5a.5.5 0 1 0-1 0v3a.5.5 0 0 0 1 0zm2.5 0a.5.5 0 1 0-1 0v3a.5.5 0 0 0 1 0zm2.5 0a.5.5 0 1 0-1 0v3a.5.5 0 0 0 1 0zm2.5 0a.5.5 0 1 0-1 0v3a.5.5 0 0 0 1 0zm2.5 0a.5.5 0 1 0-1 0v3a.5.5 0 0 0 1 0z"
+                      />
+                    </svg>
+                    Basket
+                  </router-link>
+                </button>
+              </li>
+
+              <span
+                class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
+              >
+                {{ totalCartCount }}
+              </span>
+            </a>
+          </div>
+        </div>
+      </nav>
+
+      <!-- This is where the routed components will be rendered -->
+      <router-view
+        :lessons="lessons"
+        :accounts="accounts"
+        :login="login"
+        @update-cart="updateCartCount"
+      ></router-view>
+    </div>
+
+    <script>
+      // Home Component
+      const Home = {
+        template: `
+          <div>
+            <h2>Welcome to the Home Page</h2>
+            <p>This is the home page of the webstore.</p>
+          </div>
+        `,
+      };
+
+      const accounts = {
+        data() {
+          return {
+            accountEmail: "",
+            accountPhone: null,
+            Customers: [
+              {
+                name: "",
+                phone: "",
+              },
+            ],
+          };
+        },
+        template: `
+        <form>
+            <div class="mb-3">
+            <h2>Creat An Account</h2>
+             <label for="accountName" class="form-label">Name:</label>
+                <input type="text" class="form-control" id="accountName" placeholder="Enter Name" value="">
+
+            <label for="exampleInputEmail1" class="form-label">Email address:</label>
+                <input type="email" class="form-control" id="accountEmail" placeholder="Enter Email" value="">
+
+            <label for="inputPhone" class="form-label">Phone:</label>
+                 <input class="form-control" style="width:30%;" id="accountPhone" type="tel" minlength="11" maxlength="11" value=""
+                placeholder="Register Phone number" />
+            </div>
+            <div class="mb-3">
+                <label for="exampleInputPassword1" class="form-label">Password:</label>
+                <input class="form-control"  id="accountPassword" type="password" placeholder="Enter Password" value="" />
+            </div>
+            <div class="mb-3 form-check">
+                <input type="checkbox" class="form-check-input" id="terms">
+                <label class="form-check-label" for="exampleCheck1">I Agree to terms and conditions</label>
+            </div>
+            <button type="submit" class="btn btn-primary">Create account</button>
+        </form>
+        `,
+        methods: {
+          store() {
+            let user = {
+              name: this.accountName,
+              name: this.accountPhone,
+              email: this.accountEmail,
+              password: this.accountPassword,
+            };
+            this.Customers.push(user);
+            this.user.accountName = null;
+            this.user.accountPhone = null;
+          },
+        },
+      };
+
+      const login = {
+        template: `
+        <form>
+            <div class="mb-3">
+                <h2>Login</h2>
+                <label for="inputPhone" class="form-label">Phone:</label>
+                 <input class="form-control" style="width:30%;" id="accountPhone" type="tel" minlength="11" maxlength="11" value=""
+                placeholder="Enter Phone number" />
+
+            <div class="mb-3">
+                <label for="exampleInputPassword1" class="form-label">Password:</label>
+                <input type="password" class="form-control" id="loginPassword" placeholder="Enter Password" value="">
+            </div>
+            <div class="mb-3 form-check">
+                <input type="checkbox" class="form-check-input" id="exampleCheck1">
+                <label class="form-check-label" style="width:30%;" for="exampleCheck1">Stay signed in</label>
+            </div>
+            <button type="submit" class="btn btn-primary">Login</button>
+        </form>
+        `,
+      };
+
+      //Lessons Component
+      const Lessons = {
+        props: ["lessons"],
+        data() {
+          return {
+            selectedSubject: "", // To store the selected genre
+            sortByPrice: "", // To store the selected price order
+            sortByLocation: "",
+            sortBySpace: "",
+          };
+        },
+        template: `
+  <div class="page-container" style="display: flex; flex-direction: column; height: 100vh;">
+  <!-- Dropdowns and Header -->
+  <div class="header-container" style="display: flex; justify-content: space-between; align-items: center; padding: 20px;">
+    <h1 class="drop1">Lessons</h1>
+
+    	 <div class="main-search-input-wrap">
+       
+     
+    <div class="main-search-input fl-wrap">
+      <div class="main-search-input-item">
+  <input id="searchLesson" type="text" @keyup.enter="searchLessons($event.target.value)" placeholder="Search Lessons...">
+</div>
+                               
+     <button class="main-search-button" @="searchLessons"><i class="fa fa-search"></i></button>
+      </div>
+       </div>
+    
+    <div class="dropdown-container" style="display: flex; gap: 10px;">
+      <!-- Filter by Subject -->
+      <div class="mb-3 drop1">
+        <label for="subject" class="form-label">Filter by Subject</label>
+        <select v-model="selectedSubject" id="subject" class="form-select">
+          <option value="">All Subjects</option>
+          <option v-for="subject in uniqueSubjects" :key="subject" :value="subject">{{ subject }}</option>
+        </select>
+      </div>
+
+      <!-- Sort by Price -->
+      <div class="mb-3 drop1">
+        <label for="price" class="form-label">Sort by Price</label>
+        <select v-model="sortByPrice" id="price" class="form-select">
+          <option value="">Default</option>
+          <option value="asc">Price: Low to High</option>
+          <option value="desc">Price: High to Low</option>
+        </select>
+      </div>
+
+            <!-- Sort by spaces -->
+
+        <div class="mb-3 drop1">
+        <label for="spaces" class="form-label">Sort by Availibility</label>
+        <select v-model="sortBySpace" id="spaces" class="form-select">
+          <option value="">Default</option>
+          <option value="asc">Availibility: Low to High</option>
+          <option value="desc">Availibility: High to Low</option>
+        </select>
+      </div>
+
+      <!-- Filter by Location -->
+      <div class="mb-3 drop1">
+        <label for="location" class="form-label">Filter by Location</label>
+        <select v-model="sortByLocation" id="location" class="form-select">
+          <option value="">All Locations</option>
+          <option v-for="location in uniqueLocations" :key="location" :value="location">{{ location }}</option>
+        </select>
+      </div>
+    </div>
+  </div>
+  
+   
+
+  <!-- Lessons Grid -->
+  <div class="grid-container" style="flex-grow: 1; overflow-y: auto; padding: 20px;">
+    <div class="row">
+      <div v-for="(lesson, index) in filteredAndSortedLessons" :key="index" class="col-md-4 mb-4">
+        <div class="card">
+          <img :src="lesson.image" height="300" class="card-img-top" alt="Lesson image">
+          <div class="card-body">
+            <h5 class="card-title">{{ lesson.subject }}</h5>
+            <p class="card-text"><strong>Location:</strong> {{ lesson.location }}</p>
+            <p><strong>Price:</strong> £{{ lesson.price }}</p>
+            <p v-if="lesson.spaces > 0"><strong>Availability:</strong> {{ lesson.spaces }}</p>
+            <p v-else><strong>Availability:</strong> No spaces available</p>
+            <button type="button" class="btn btn-success" @click="addCart(index)">Add to cart</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>`,
+        computed: {
+          uniqueLocations() {
+            // Create a Set to ensure uniqueness
+            const locations = new Set(
+              this.lessons.map((lesson) => lesson.location)
+            );
+            // Convert the Set back into an array
+            return Array.from(locations);
+          },
+          uniqueSubjects() {
+            // Create a Set to ensure uniqueness
+            const subjects = new Set(
+              this.lessons.map((lesson) => lesson.subject)
+            );
+            // Convert the Set back into an array
+            return Array.from(subjects);
+          },
+
+          filteredAndSortedLessons() {
+            // Filter by subject
+            let filteredLessons = this.lessons.filter((lesson) => {
+              return (
+                this.selectedSubject === "" ||
+                lesson.subject === this.selectedSubject
+              );
+            });
+
+            // Sort by price
+            if (this.sortByPrice === "asc") {
+              filteredLessons.sort((a, b) => a.price - b.price);
+            } else if (this.sortByPrice === "desc") {
+              filteredLessons.sort((a, b) => b.price - a.price);
+            }
+            // sort by spaces
+            if (this.sortBySpace === "asc") {
+              filteredLessons.sort((a, b) => a.spaces - b.spaces);
+            } else if (this.sortBySpace === "desc") {
+              filteredLessons.sort((a, b) => b.spaces - a.spaces);
+            }
+
+            // Filter by location
+            if (this.sortByLocation !== "") {
+              filteredLessons = filteredLessons.filter(
+                (lesson) => lesson.location === this.sortByLocation
+              );
+            }
+
+            return filteredLessons;
+          },
+        },
+        methods: {
+          addCart(index) {
+            // Check if there are spaces available in the lesson
+            if (this.lessons[index].spaces > 0) {
+              this.lessons[index].cartCounter++; // Increment the cartCounter
+              this.lessons[index].spaces--;
+              this.$emit("update-cart"); // Emit the "update-cart" event
+            } else {
+              return; // Simply return if no spaces are available
+            }
+          },
+          async searchLessons(query) {
+            try {
+              const response = await fetch(
+                `https://y3-web-development-coursework-1-main.onrender.com/searchLessons`,
+                {
+                  method: "POST",
+                  headers: {
+                    "Content-Type": "application/json",
+                  },
+                  body: JSON.stringify({ searchQuery: query }),
+                }
+              );
+              const data = await response.json();
+              console.log("Search results:", data); // Log the response
+              this.lessons = data; // Update lessons data with the search results
+            } catch (error) {
+              console.error("error searching for results:", error);
+            }
+          },
+        },
+      };
+      // Basket Component
+      const Basket = {
+        props: ["lessons"],
+        data() {
+          return {
+            checkoutName: null,
+            checkoutPhone: null,
+            Customers: [{}],
+          };
+        },
+        template: `
+          <div>
+            <h2>Your Basket</h2>
+            <div v-if="cartItems.length > 0">
+              <ul class="list-group">
+                <li v-for="(lesson, index) in cartItems" :key="index" class="list-group-item d-flex justify-content-between align-items-center">
+                  <span>
+                    <strong>{{ lesson.subject }}</strong> - £{{ lesson.price }} (Quantity: {{ lesson.cartCounter }})
+                  </span>
+                  <button class="btn btn-danger btn-sm" @click="removeFromCart(lesson)">Remove</button>
+                </li>
+              </ul>
+              <div class="mt-4">
+                <strong>Total: £{{ totalCost }}</strong>
+              </div>
+              <div class="mb-3">
+                <label for="checkoutName" class="form-label">Name:</label>
+                <input type="text" class="form-control" id="checkoutName" placeholder="Enter Name" v-model="checkoutName">
+            </div>
+              <div class="mb-3">
+                <label for="checkoutPhone" class="form-label">Phone:</label>
+                <input type="phone" class="form-control" id="checkoutPhone" placeholder="Enter Phone Number" v-model="checkoutPhone">
+                <button class="btn btn-success btn-sm" @click="Validate">Confirm</button>
+                <div>
+    <p>Details:</p>
+
+      <p v-for="user in Customers">{{ user.name }} <br> {{ user.phone}}</p>
+    
+  </div>
+            </div>
+              <button id="checkoutBtn" class="btn btn-success btn-sm" :disabled="!isUser()" @click="placeOrder">Checkout</button>
+            </div>
+            <div v-else>
+              <p>Your basket is empty.</p>
+            </div>
+          </div>
+        `,
+        computed: {
+          cartItems() {
+            return this.lessons.filter((lesson) => lesson.cartCounter > 0);
+          },
+          totalCost() {
+            return this.cartItems.reduce(
+              (total, lesson) => total + lesson.price * lesson.cartCounter,
+              0
+            );
+          },
+        },
+        methods: {
+          removeFromCart(lesson) {
+            if (lesson.cartCounter > 0) {
+              lesson.cartCounter--;
+              lesson.spaces++;
+              this.$emit("update-cart");
+            }
+          },
+          store() {
+            let user = {
+              name: this.checkoutName,
+              phone: this.checkoutPhone,
+            };
+
+            this.Customers.push(user);
+            console.log(user);
+          },
+
+          validation() {
+            let name = this.checkoutName;
+            let phone = this.checkoutPhone;
+
+            // Regular expression for letters only (name validation)
+            let nameExp = /^[a-zA-Z\s]+$/;
+
+            // Regular expression for numbers only (phone validation)
+            let phoneExp = /^[0-9]+$/;
+
+            if (!nameExp.test(name)) {
+              alert("Name: you must enter letters only");
+              return false;
+            }
+            if (!phoneExp.test(phone)) {
+              alert("Numbers: you must digits 0-9");
+              return false;
+            }
+            return true;
+          },
+          Validate() {
+            if (this.validation()) {
+              this.store();
+            }
+          },
+          isUser() {
+            return this.checkoutName && this.checkoutPhone;
+            checkBtn = document.getElementById("checkoutBtn");
+          },
+          async placeOrder() {
+            const orderDetails = {
+              name: this.checkoutName, // Customer's name
+              phone: this.checkoutPhone, // Customer's phone
+              lessonIDs: this.cartItems.map((item) => item.id), // Array of lesson IDs from cart items
+              spaces: this.cartItems.reduce(
+                (total, item) => total + item.cartCounter,
+                0
+              ), // Total spaces
+            };
+
+            try {
+              const response = await fetch("/M00874694/orders", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(orderDetails),
+              });
+              const data = await response.json();
+
+              if (data.success) {
+                alert("Your order has been finalised");
+                await this.updateSpaces(
+                  orderDetails.lessonIDs,
+                  orderDetails.spaces
+                );
+
+                this.checkoutName = "";
+                this.checkoutPhone = "";
+              } else {
+                alert("Failed to place order: " + data.error);
+              }
+            } catch (error) {
+              console.error("Error placing order:", error);
+              alert("An error occurred while placing the order.");
+            }
+          },
+
+          async updateSpaces(lessonIDs, spaces) {
+            try {
+              const response = await fetch("/lessons", {
+                method: "PUT",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ lessonIDs, spaces }),
+              });
+              const data = await response.json();
+              if (data.success) {
+                console.log("space update successful", spaces, lessonIDs);
+              } else {
+                console.error("there was an error: ", data.error);
+              }
+            } catch (error) {
+              console.error("error updating spaces ", error);
+            }
+          },
+        },
+      };
+    </script>
+    <script src="app.js"></script>
+  </body>
+</html>
